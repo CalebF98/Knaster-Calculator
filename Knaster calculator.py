@@ -1,45 +1,77 @@
 # hardcoded example data
 data = {
-    "Piano": {"John":15, "Paul":20, "George":5, "Ringo":10},
-    "Guitar": {"John":25, "Paul":20, "George":15, "Ringo":5},
-    "Drums": {"John":15, "Paul":20, "George":5, "Ringo":30},
-    "Bass": {"John":20, "Paul":30, "George":5, "Ringo":20}
+    "John": {"Guitar": 40, "Piano": 30, "Bass": 5, "Drums": 15},
+    "Paul": {"Guitar": 10, "Piano": 30, "Bass": 35, "Drums": 5},
+    "George": {"Guitar": 50, "Piano": 5, "Bass": 5, "Drums": 5},
+    "Ringo": {"Guitar": 15, "Piano": 15, "Bass": 15, "Drums": 35},
 }
+
+class Asset:
+    def __init__(self, name, owner, value):
+        this.name = name
+        this.owner = owner
+        this.value = value
+
+    
+
+class Heir:
+    def __init__(self, name, bids):
+        self.name = name
+        self.bids = bids
+        self.assets = []
+
+
+
 
 
 # main function for performing the Knaster Inheiritance algorithm
 def knaster():
-    assets = initial_winners()
-    print(assets)
-    fair_shares = {}
-    kitty = 0
+    # create initial list of Heirs
+    heirs = []
+    for key, value in data.items():
+        current_heir = Heir(key, value)
+        heirs.append(current_heir)
+
+    initial_winners(heirs)
     
-    
+
     
     
 # helper function for knaster()
-# for object in data, find the highest bidder, and return a list of
-# items in the format of winners = [{"asset1:"heir1"}, {"asset2":"heir2"}...etc]
-def initial_winners():   
-    winners = []
-
-    for item in data:
-        winner = {}
-        highest_bid = 0
-        current_item = data[item]
-        for x in current_item:
-            bid = current_item[x]
-            if bid > highest_bid:
-                highest_bid = bid
-                winner[x] = current_item
-        winners.append(winner)
-    return winners
+def initial_winners(list_of_heirs):
+    winners = {}
+    
+    # create a list of items to iterate over,
+    # using the 0th heir from list_of_heirs
+    items = []
+    first_bidder = list_of_heirs[0].bids
+    for item in first_bidder:
+        items.append(item)
 
 
 
+'''
+TODO: Right now, the alogrithm fails on the piano item, because the second bid
+      is the same value as bid 1. Fix the algorithm so it always chooses
+      exactly one winner
+'''
+    # iterate through each asset, and assign it to the heir that bid the highest
+    for item in items:
+        highest_bidder = first_bidder[item]
+        for heir in list_of_heirs:
+                
+            # if the current bid is greater than the highest_bidder,
+            # create a new entry in the winners dictionary,
+            # EX: winners = {'Ringo': {'Drums': 35}, 'George': {'Guitar': 50}}
+            if heir.bids[item] > highest_bidder:
+                highest_bidder = heir.bids[item]
+                winners[item] = [heir.name, heir.bids[item]]
 
+    # create new Asset for each item, and append that Assset
+    # to the assets (list) property of its owner
 
 knaster()
+
 
 
 
